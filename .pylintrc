@@ -1,0 +1,13 @@
+[MAIN]
+# E0401: import-error
+# W0107: unnecessary-pass
+# W0703: broad-except
+# C0114: missing-module-docstring
+# R0913: too-many-arguments
+disable=E0401, W0107, W0703, C0114, R0913
+
+[DESIGN]
+min-public-methods=1
+
+[FORMAT]
+max-line-length=120

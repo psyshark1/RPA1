@@ -1,0 +1,34 @@
+variables:
+  GIT_CLEAN_FLAGS: none
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+
+stages:
+  - linting
+  - security
+
+before_script:
+  - python --version
+  - python -m venv $CI_PROJECT_DIR/venv
+  - cd $CI_PROJECT_DIR/venv/Scripts; ./activate; cd $CI_PROJECT_DIR
+  - python -m pip install --upgrade pip --proxy http://vlg-proxy.megafon.ru:3128
+
+pylint:
+  stage: linting
+  script:
+    - pip install pylint==2.12.2 pylint-junit --proxy http://vlg-proxy.megafon.ru:3128
+    - pylint business mail db main.py
+  allow_failure: true
+  tags:
+    - windows
+
+bandit:
+  stage: security
+  script:
+    - pip install bandit==1.7.2 --proxy http://vlg-proxy.megafon.ru:3128
+    - bandit -r ./
+  tags:
+    - windows
